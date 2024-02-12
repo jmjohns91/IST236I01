@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "RestaurantMenu",
+    "slug": "RestaurantMenu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#990D04",
+      "plugins": [
+        [
+          "expo-font",
+          {
+            "fonts": [
+              "assets/fonts/Poor_Story/PoorStory-Regular.ttf"
+            ]
+          }
+        ]
+      ]
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#990D04"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
