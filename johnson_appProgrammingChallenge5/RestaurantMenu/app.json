@@ -9,18 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#990D04",
-      "plugins": [
-        [
-          "expo-font",
-          {
-            "fonts": [
-              "assets/fonts/Poor_Story/PoorStory-Regular.ttf",
-              "assets/fonts/BioRhyme/static/BioRhyme-Regular.ttf"
-            ]
-          }
-        ]
-      ]
+      "backgroundColor": "#990D04"
     },
     "assetBundlePatterns": [
       "**/*"

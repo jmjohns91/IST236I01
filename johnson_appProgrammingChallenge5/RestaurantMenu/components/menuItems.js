@@ -7,15 +7,16 @@ import Colors from '../constants/colors';
 function MenuItems(props) {
   return (
     <View style={styles.itemContainer}>
-
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={props.image}>
-        </Image>
-      </View>
-      <View style={styles.priceContainer}>
-        <Text style={styles.price}>
-          {props.price}
-        </Text>
+      <View style={styles.rowContainer}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={props.image}>
+          </Image>
+        </View>
+        <View style={styles.priceContainer}>
+          <Text style={styles.price}>
+            {props.price}
+          </Text>
+        </View>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             {props.name}
@@ -58,7 +59,10 @@ const styles = StyleSheet.create({
   },
   price: {
     color: Colors.accentColor,
-    fontSize: 15,
+    fontSize: 25,
     textAlign: "right",
   },
+  rowContainer: {
+    flexDirection: 'row',
+  }
 })
