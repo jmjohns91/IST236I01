@@ -1,0 +1,154 @@
+import Article from "../models/articles";
+
+export const articles = [
+  new Article(
+    1,
+    "tech",
+    "Northumbria University",
+    "Phys.Org",
+    "Mar 15, 2024",
+    "Brighter, cheaper blue light could revolutionize screen technology",
+    "https://scx1.b-cdn.net/csz/news/800a/2024/brighter-cheaper-blue.jpg",
+    "A team of researchers from Northumbria, Cambridge, Imperial, and Loughborough universities has developed a new design for blue OLEDs, potentially leading to more efficient, longer-lasting, and cheaper TV and smartphone screens. Their study in Nature Materials introduces a light-emitting molecule with added shields that block destructive energy pathways, improving molecule interaction and efficiency. This innovation could significantly reduce energy consumption in devices, aligning with net zero targets, and addresses issues with the lifespan and efficiency of blue subpixels in OLED displays."
+  ),
+  new Article(
+    2,
+    "tech",
+    "Shiona McCallum, Liv McMahon & Tom Singleton",
+    "BBC",
+    "Mar 13, 2024",
+    "MEPs approve world's first comprehensive AI law",
+    "https://ichef.bbci.co.uk/news/1536/cpsprodpb/4F37/production/_132897202_gettyimages-1258702904.jpg.webp",
+    "The European Parliament has approved a significant AI Act, making it a pioneer in global AI regulation. This legislation categorizes AI products based on risk levels, with stringent rules for high-risk applications in critical areas like healthcare, law enforcement, and others. It bans AI that threatens fundamental rights, particularly involving biometric data. The Act aims for \"human - centric\" AI governance and positions the EU as a leader in establishing trustworthy AI standards worldwide. It's not yet law but is expected to greatly influence global AI regulation, with companies preparing to align with its requirements."
+  ),
+  new Article(
+    3,
+    "tech",
+    "Sethu Pradeep",
+    "Rueters",
+    "March 15, 2024",
+    "SpaceX says it \‘lost\’ Starship after mostly-successful third launch",
+    "https://images.indianexpress.com/2024/03/Starship-launch-SpaceX-20240315.jpg?w=640",
+    "SpaceX's Starship had its third test flight from the Starbase facility, successfully reaching orbit but losing the spacecraft during reentry into Earth's atmosphere. This marks progress compared to previous failures. Starship, intended for missions to the Moon and potentially Mars, is vital for NASA's Artemis 3 lunar mission. SpaceX's rapid iteration approach is pushing the development of this powerful launch system, bringing it closer to operational readiness for significant space exploration missions."
+  ),
+  new Article(
+    4,
+    "tech",
+    "YURI KAGEYAMA",
+    "AP",
+    "March 15, 2024",
+    "Honda and Nissan agree to work together in developing electric vehicles and intelligent technology",
+    "https://dims.apnews.com/dims4/default/4fa6e0f/2147483647/strip/true/crop/5000x3333+0+0/resize/1440x960!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F20%2Fda%2Ffb2d8359b140df2b670c311d6c8c%2F8966eae1480b4e77981d5625a39551a8",
+    "Nissan and Honda have announced a collaboration to develop electric vehicles and auto intelligence technology, acknowledging the need to catch up in these rapidly growing sectors. They plan to develop core technologies together while maintaining distinct products. The agreement aims to address challenges like EV technology advancement and climate change concerns. This partnership reflects the industry's shift towards electric vehicles and marks a significant step for both Japanese automakers in competing with global rivals."
+  ),
+  new Article(
+    5,
+    "tech",
+    "Leah Willingham",
+    "AP",
+    "March 16, 2024",
+    "TikTok creators warn of economic impact if app sees ban, call it a vital space for the marginalized",
+    "https://dims.apnews.com/dims4/default/efe50ad/2147483647/strip/true/crop/6000x4000+0+0/resize/1440x960!/format/webp/quality/90/?url=https%3A%2F%2Fassets.apnews.com%2F59%2F41%2F5893ba3333fc284ca87d588fa751%2F1ba3b5ada91048ee915b02e8aaa8efbb",
+    "TikTok creators are concerned about a proposed U.S. bill that could lead to a nationwide TikTok ban. The House of Representatives passed the bill, which requires Chinese-owned ByteDance to sell its stake in TikTok. Content creators argue that a ban would impact many who rely on the platform for income and community. TikTok's popularity and influence have surged, but concerns about user data security and Chinese government influence persist. The bill still needs Senate approval, and its future there is uncertain."
+  ),
+  new Article(
+    6,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "Cease-fire talks with Israel and Hamas are expected to resume on Sunday in Qatar",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    7,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    8,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    9,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    10,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    11,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    12,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    13,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    14,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+  new Article(
+    15,
+    "type",
+    "author",
+    "agency",
+    "date",
+    "headline",
+    "imageurl",
+    "summary"
+  ),
+];
