@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 /archived
-/.history
+.history/
