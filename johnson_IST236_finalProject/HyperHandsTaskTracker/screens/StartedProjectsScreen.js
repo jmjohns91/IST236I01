@@ -5,7 +5,7 @@ export const StartedProjectsScreen = () => {
   const navigation = util.useNavigation();
   const [projects, setProjects] = util.useState([]);
   const [selectedPhoto, setSelectedPhoto] = util.useState(null);
-
+  const { width, height } = util.useWindowDimensions();
   util.useEffect(() => {
     const fetchProjects = async () => {
       let storedData = await util.AsyncStorage.getItem('@projectIDs');
@@ -135,37 +135,33 @@ export const StartedProjectsScreen = () => {
     setProjects(projects);
   };
 
-  const handleAddNewProject = async () => {
-    let projects = JSON.parse(await util.AsyncStorage.getItem('projects'));
-    const newProject = { /* new project details */ };
-    projects.push(newProject);
-    await util.AsyncStorage.setItem('projects', JSON.stringify(projects));
-    navigation.navigate('ProjectDetailsScreen', { project: newProject });
+  const handleAddNewProject = () => {
+    navigation.navigate('ProjectDetailsScreen');
   };
   return (
-    <util.View style={styles.container}>
+    <util.View style={styles.projectsContainer}>
       <util.ScrollView>
         {projects.map((project) => (
           <util.View
             key={project.projectId}
             style={[styles.projectCard, { opacity: project.completed ? 0.5 : 1 }]}
-          >
-            <util.Icon name={project.icon} size={30} color={colors.primaryVariant} />
-            <util.Text style={styles.projectTitle}>{project.title}</util.Text>
-            <util.Text style={styles.projectContents}>{project.contents}</util.Text>
-            {project.photos.map((photo) => (
+          ><util.View style={styles.projectHeader}>
+              <util.Entypo name={project.projectIcon} size={height / 15} color={Colors.primaryVariant} padding={5} />
+              <util.Text style={styles.projectTitle}>{project.projectTitle}</util.Text></util.View>
+            <util.Text style={styles.projectContents}>{project.projectContents}</util.Text>
+            {/* {project.photos.map((photo) => (
               <util.View key={photo.id} style={styles.photoContainer}>
                 <util.Image source={{ uri: photo.uri }} style={styles.photo} />
-                <util.Pressable style={styles.blueButton} onPress={() => handleViewPhoto(photo)}> <util.Text style={styles.buttonText}>View Photo</util.Text></util.Pressable>
-                <util.Pressable style={styles.redButton} onPress={() => handleRemovePhoto(project.id, photo.id)}> <util.Text style={styles.buttonText}>Remove Photo</util.Text></util.Pressable>
-              </util.View>
-            ))}
+            <util.Pressable style={styles.blueButton} onPress={() => handleViewPhoto(photo)}> <util.Text style={styles.buttonText}>View Photo</util.Text></util.Pressable>
+            <util.Pressable style={styles.redButton} onPress={() => handleRemovePhoto(project.id, photo.id)}> <util.Text style={styles.buttonText}>Remove Photo</util.Text></util.Pressable>
+          </util.View> 
+        ))}*/}
             <util.View style={styles.buttonRow}>
               <util.Pressable style={styles.greenButton} onPress={() => handleMarkProgress(project.id)}>
                 <util.Text style={styles.buttonText}>Mark Progress</util.Text>
               </util.Pressable>
               <util.Pressable style={styles.greenButton} onPress={() => handleMarkComplete(project.id)}>
-                <util.Text style={styles.buttonutil.Text}>Mark Complete</util.Text>
+                <util.Text style={styles.buttonText}>Mark Complete</util.Text>
               </util.Pressable>
               <util.Pressable style={styles.redButton} onPress={() => handleDelete(project.id)}>
                 <util.Text style={styles.buttonText}>Delete</util.Text>
@@ -180,8 +176,9 @@ export const StartedProjectsScreen = () => {
               </util.Pressable>
             )}
           </util.View>
-        ))}
-      </util.ScrollView>
+        ))
+        }
+      </util.ScrollView >
       <util.Button title="Add New Project" onPress={handleAddNewProject} />
       <util.Modal
         animationType="slide"
@@ -190,7 +187,7 @@ export const StartedProjectsScreen = () => {
         onRequestClose={() => setSelectedPhoto(null)}
       >
       </util.Modal>
-    </util.View>
+    </util.View >
   );
 };
 

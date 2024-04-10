@@ -1,11 +1,13 @@
 import { Colors, Fonts, styles } from './constants/index';
 import * as util from './index';
 import * as comp from './components/index';
-import { HomeScreen, ProjectIdeasScreen, ProjectDetailsScreen, IdeaDetailsScreen, StartedProjectsScreen } from './screens/index';
+import { createDummyData } from './data/dummyData';
+import { HomeScreen, ProjectIdeasScreen, ProjectDetailsScreen, IdeaDetailScreen, StartedProjectsScreen } from './screens/index';
 util.SplashScreen.preventAutoHideAsync();
 const Stack = util.createNativeStackNavigator();
 
 export default function App() {
+
   let [fontsLoaded, fontError] = Fonts();
 
   const onLayoutRootView = util.useCallback(async () => {
@@ -17,8 +19,9 @@ export default function App() {
   if (!fontsLoaded && !fontError) {
     return null;
   } else {
+
     return (
-      <util.NavigationContainer onReady={onLayoutRootView}>
+      <util.NavigationContainer onReady={onLayoutRootView} >
         <util.StatusBar style='auto' />
         <util.SafeAreaProvider>
           <Stack.Navigator
@@ -44,9 +47,16 @@ export default function App() {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="IdeaDetailScreen"
+              component={IdeaDetailScreen}
+              options={{
+                headerBackTitleVisible: false,
+                headerShown: false,
+              }}
+            />
           </Stack.Navigator>
         </util.SafeAreaProvider>
-
       </util.NavigationContainer>
     );
   }

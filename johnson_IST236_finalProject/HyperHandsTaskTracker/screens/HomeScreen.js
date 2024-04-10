@@ -1,6 +1,5 @@
 import * as util from '../index';
 import { Colors, Fonts, styles } from '../constants/index';
-import { ProjectDetailsScreen, IdeaDetailScreen } from './index';
 export const HomeScreen = ({ navigation, route }) => {
   const [tasksCompletedPercentage, setTasksCompletedPercentage] = util.useState(0);
   const [openProjects, setOpenProjects] = util.useState(0);
@@ -26,12 +25,25 @@ export const HomeScreen = ({ navigation, route }) => {
       const openProjects = projects.filter(project => !project.completed);
       setOpenProjects(openProjects.length);
       const oldestOpenProject = openProjects.reduce((oldest, project) => {
-        return (!oldest || new Date(project.createdDate) < new Date(oldest.createdDate)) ? project : oldest;
+        const projectDate = new Date(project.createdDate);
+        const oldestDate = oldest ? new Date(oldest.createdDate) : null;
+
+        if (!oldest || projectDate < oldestDate) {
+          const daysSinceLastProgress = Math.ceil((new Date() - new Date(project.lastMarkedProgressDate)) / (1000 * 60 * 60 * 24));
+          return {
+            ...project,
+            daysSinceLastProgress,
+          };
+        } else {
+          return oldest;
+        }
       }, null);
+
       setOldestOpenProject(oldestOpenProject);
     };
 
     fetchProjectsData();
+
   }, []);
   const handleOldestOpenProject = (projectId) => {
     navigation.navigate('ProjectDetailsScreen', { projectId: projectId });
@@ -68,10 +80,11 @@ export const HomeScreen = ({ navigation, route }) => {
         <util.View style={styles.ooP}>
           {oldestOpenProject && (
             <util.TouchableOpacity style={styles.homeCard} onPress={() => handleOldestOpenProject(oldestOpenProject.id)}>
-              <util.Text style={styles.oldestProjectTitle}>{oldestOpenProject.title}</util.Text>
+              <util.View style={styles.iconContainerOOP}><util.Entypo name={oldestOpenProject.projectIcon} size={30} color={Colors.primary} /></util.View>
+              <util.Text style={styles.oldestProjectTitle}>{oldestOpenProject.projectTitle}</util.Text>
               <util.View style={styles.daysSinceProgressContainer}>
                 <util.Text style={styles.daysSinceProgressLabel}>Days since progress made</util.Text>
-                <util.Text style={styles.daysSinceProgressNumber}>{oldestOpenProject.daysSinceProgress}</util.Text>
+                <util.Text style={styles.daysSinceProgressNumber}>{oldestOpenProject.daysSinceLastProgress}</util.Text>
               </util.View>
               <util.Text style={styles.label}>Oldest Open Project</util.Text>
             </util.TouchableOpacity>

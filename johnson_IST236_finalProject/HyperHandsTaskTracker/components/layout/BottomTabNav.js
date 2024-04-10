@@ -12,6 +12,7 @@ function HomeHeaderTitle({ children }) {
   );
 }
 export const BottomTabNavigator = () => {
+  const { width, height } = util.useWindowDimensions();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -37,7 +38,7 @@ export const BottomTabNavigator = () => {
       <Tab.Screen name="Home" component={HomeScreen} options={{
         headerShown: true,
         headerTitle: props => <HomeHeaderTitle {...props} />,
-        headerStyle: { backgroundColor: Colors.primary },
+        headerStyle: { backgroundColor: Colors.primary, height: height / 6 },
       }} />
       <Tab.Screen name="Ideas" component={ProjectIdeasScreen} options={{
         headerStyle: { backgroundColor: Colors.primary },

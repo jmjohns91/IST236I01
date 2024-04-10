@@ -73,6 +73,8 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.accentColor,
     color: Colors.primaryText,
     fontFamily: 'etnaSS',
+    padding: 3,
+    borderRadius: 5,
   },
   daysSinceProgressNumber: {
     color: Colors.primary,
@@ -86,6 +88,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   hyperHands: {
     fontFamily: 'Dokdo',
@@ -99,11 +102,15 @@ export const styles = StyleSheet.create({
     fontSize: 35,
     textAlign: 'right',
     margin: -10,
-    marginTop: -20,
+    marginTop: -10,
     marginBottom: 3,
     marginRight: -90,
+
   },
-  titleContainer: {},
+  titleContainer: {
+    backgroundColor: Colors.primary,
+    padding: 10,
+  },
   header: {
     backgroundColor: Colors.primary,
     padding: 10,
@@ -130,6 +137,7 @@ export const styles = StyleSheet.create({
     color: Colors.secondaryText,
     fontFamily: 'etnaSS',
     fontSize: 18,
+    paddingLeft: 10,
   },
   projectContents: {
     color: Colors.secondaryText,
@@ -235,5 +243,13 @@ export const styles = StyleSheet.create({
     fontFamily: 'etnaSS',
     textAlign: 'center',
     fontSize: 40,
+  },
+  projectContainer: {
+    flex: 1,
+  },
+  projectHeader: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
   },
 });

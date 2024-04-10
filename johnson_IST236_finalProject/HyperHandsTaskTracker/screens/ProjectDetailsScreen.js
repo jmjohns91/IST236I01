@@ -1,10 +1,11 @@
 import { Colors, Fonts, styles } from '../constants/index';
 import * as util from '../index'
+import { IconPicker, BottomTabNavigator } from '../components';
 
 
 export const ProjectDetailsScreen = ({ route, navigation }) => {
   const [projectID, setProjectID] = util.useState('');
-  const [selectedIcon, setSelectedIcon] = util.useState(null);
+  const [icon, setIcon] = util.useState(null);
   const [projectIcon, setProjectIcon] = util.useState(null);
   const [projectTitle, setProjectTitle] = util.useState('');
   const [projectContents, setProjectContents] = util.useState('');
@@ -13,8 +14,8 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
   const [lastEditedDate, setLastEditedDate] = util.useState(new Date());
   const [lastMarkedProgressDate, setLastMarkedProgressDate] = util.useState(new Date());
   const [showIconPicker, setShowIconPicker] = util.useState(false);
-  const onSelect = (icon) => {
-    setShowIconPicker(false);
+  const changeIcon = (newIcon) => {
+    setIcon(newIcon);
   };
   const insets = util.useSafeAreaInsets();
   const { width, height } = util.useWindowDimensions();
@@ -97,29 +98,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
               <util.View style={styles.projectIconContainer}>
                 <util.Text style={styles.label}>Project Icon</util.Text>
                 <util.View style={styles.iconButtons}>
-                  {/* <IconPicker
-                    showIconPicker={this.state.showIconPicker}
-                    toggleIconPicker={() => this.setState({ showIconPicker: !this.state.showIconPicker })}
-                    iconDetails={[
-                      { family: "AntDesign", color: "blue", icons: ["wallet"] },
-                      { family: "Entypo", icons: ["wallet"] },
-                      { family: "FontAwesome", icons: ["google-wallet"] },
-                      { family: "FontAwesome5", icons: ["wallet"] },
-                      { family: "Fontisto", icons: ["wallet"] },
-                      {
-                        family: "MaterialCommunityIcons",
-                        icons: ["wallet-membership"]
-                      },
-                      { family: "MaterialIcons", icons: ["wallet-travel"] }
-                    ]
-                    }
-                    content={<util.Text>Change Icon</util.Text>}
-                    selectedIcon={selectedIcon}
-                    onSelect={onSelect}
-                  /> */}
-                  <util.Pressable style={styles.blueButton} onPress={changeIcon}>
-                    <util.Text style={styles.buttonText}>Change</util.Text>
-                  </util.Pressable>
+                  <IconPicker onIconPicked={changeIcon} />
                   <util.Pressable style={styles.redButton} onPress={removeIcon}>
                     <util.Text style={styles.buttonText}>Remove</util.Text>
                   </util.Pressable>
@@ -155,7 +134,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
           <util.Pressable style={styles.saveButton} onPress={saveProject}>
             <util.Text style={styles.bigButtonText}>Save</util.Text>
           </util.Pressable>
-          <util.Pressable style={[styles.cancelButton, { backgroundColor: colors.error }]} onPress={() => navigation.goBack()}>
+          <util.Pressable style={[styles.cancelButton, { backgroundColor: Colors.error }]} onPress={() => navigation.goBack()}>
             <util.Text style={styles.bigButtonText}>Cancel</util.Text>
           </util.Pressable>
         </util.View>
