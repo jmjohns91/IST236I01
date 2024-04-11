@@ -61,13 +61,15 @@ export const styles = StyleSheet.create({
   oldestProjectTitle: {
     color: Colors.secondaryText,
     fontFamily: 'etnaSS',
-    fontSize: 18,
+    fontSize: 35,
+    flex: 2,
   },
   daysSinceProgressContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: Colors.surface,
+    flex: 3,
   },
   daysSinceProgressLabel: {
     backgroundColor: Colors.accentColor,
@@ -75,9 +77,15 @@ export const styles = StyleSheet.create({
     fontFamily: 'etnaSS',
     padding: 3,
     borderRadius: 5,
+    fontSize: 20,
+    marginBottom: -10,
   },
   daysSinceProgressNumber: {
     color: Colors.primary,
+    padding: 5,
+    fontSize: 45,
+    fontFamily: 'MajorMono',
+
   },
   widgets: {
     flex: 2,
@@ -86,25 +94,28 @@ export const styles = StyleSheet.create({
   },
   ooP: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
+    flexDirection: 'row',
+    alignContent: 'flex-start',
   },
   hyperHands: {
     fontFamily: 'Dokdo',
     fontSize: 60,
     padding: -20,
     margin: -10,
+    marginTop: - 30,
     textAlign: 'left',
+    color: Colors.primaryText,
   },
   taskTracker: {
     fontFamily: 'etnaSS',
     fontSize: 35,
     textAlign: 'right',
     margin: -10,
-    marginTop: -10,
+    marginTop: -5,
     marginBottom: 3,
     marginRight: -90,
+    color: Colors.primaryText,
 
   },
   titleContainer: {
@@ -132,6 +143,7 @@ export const styles = StyleSheet.create({
   },
   projectIcon: {
     color: Colors.primaryVariant,
+    alignItems: 'center',
   },
   projectTitle: {
     color: Colors.secondaryText,
@@ -191,11 +203,14 @@ export const styles = StyleSheet.create({
   projectIconContainer: {
     // flexDirection: 'row',
     justifyContent: 'space-between',
-    //alignItems: 'center',
-    flex: 1,
+    alignItems: 'center',
+    flex: .5,
+    marginLeft: -20,
   },
-  iconButtons: {
-    flexDirection: 'row',
+  iconButton: {
+    padding: 2,
+    paddingHorizontal: 5,
+    margin: 5,
   },
   buttonText: {
     color: Colors.primaryText,
@@ -212,6 +227,7 @@ export const styles = StyleSheet.create({
   },
   topContainer: {
     flex: 1,
+    flexDirection: 'column',
   },
   contentsContainer: {
     flex: 1,
@@ -220,8 +236,13 @@ export const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
+    flex: 1,
   },
-  photoContainer: { flex: 1, },
+  photoContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+
+  },
   saveButton: {
     flex: 1,
     backgroundColor: Colors.accentColor,
@@ -252,4 +273,38 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  iconContainerOOP: {
+    flex: 1,
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    verticalAlign: 'center',
+  },
+  oldestTopContainer: {
+    flexDirection: 'row',
+  },
+  projectsContainer: {
+    flex: 1,
+  },
+  bigButton: {
+    padding: 5,
+    borderRadius: 10,
+    flex: 2,
+    minHeight: ' 9 %',
+    margin: 3,
+  },
+  photoPicker: {
+    alignItems: 'center',
+  },
+  photoGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  photo: {
+    width: 100,
+    height: 100,
+    margin: 5,
+  },
+
 });

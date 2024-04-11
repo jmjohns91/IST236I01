@@ -9,7 +9,9 @@ export const HomeScreen = ({ navigation, route }) => {
   const handleNewProject = () => {
     navigation.navigate('ProjectDetailsScreen');
   };
+  <util.LiquidGauge
 
+  />
   const handleAddNewIdea = () => {
     navigation.navigate('IdeaDetailScreen');
   };
@@ -45,8 +47,8 @@ export const HomeScreen = ({ navigation, route }) => {
     fetchProjectsData();
 
   }, []);
-  const handleOldestOpenProject = (projectId) => {
-    navigation.navigate('ProjectDetailsScreen', { projectId: projectId });
+  const handleOldestOpenProject = (projectID) => {
+    navigation.navigate('ProjectDetailsScreen', { projectID: projectID });
   };
   return (
     <util.View style={styles.container}>
@@ -54,7 +56,13 @@ export const HomeScreen = ({ navigation, route }) => {
         <util.View style={styles.widgets}>
           <util.View style={styles.row}>
             <util.View style={styles.homeCard}>
-              <util.LiquidGauge value={tasksCompletedPercentage} />
+              <util.LiquidGauge config={{
+                circleColor: Colors.primary,
+                textColor: Colors.primary,
+                waveTextColor: Colors.primaryText,
+                waveColor: Colors.primaryVariant,
+                waveAnimateTime: 1000,
+              }} value={tasksCompletedPercentage} />
               <util.Text style={styles.label} >Tasks Completed</util.Text>
             </util.View>
             <util.View style={styles.homeCard}>
@@ -79,11 +87,12 @@ export const HomeScreen = ({ navigation, route }) => {
 
         <util.View style={styles.ooP}>
           {oldestOpenProject && (
-            <util.TouchableOpacity style={styles.homeCard} onPress={() => handleOldestOpenProject(oldestOpenProject.id)}>
-              <util.View style={styles.iconContainerOOP}><util.Entypo name={oldestOpenProject.projectIcon} size={30} color={Colors.primary} /></util.View>
-              <util.Text style={styles.oldestProjectTitle}>{oldestOpenProject.projectTitle}</util.Text>
+            <util.TouchableOpacity style={styles.homeCard} onPress={() => handleOldestOpenProject(oldestOpenProject.projectID)}>
+              <util.View style={styles.oldestTopContainer}>
+                <util.View style={styles.iconContainerOOP}><util.Entypo name={oldestOpenProject.projectIcon} size={width / 6} color={Colors.primary} /></util.View>
+                <util.Text style={styles.oldestProjectTitle}>{oldestOpenProject.projectTitle}</util.Text></util.View>
               <util.View style={styles.daysSinceProgressContainer}>
-                <util.Text style={styles.daysSinceProgressLabel}>Days since progress made</util.Text>
+                <util.Text style={styles.daysSinceProgressLabel}>Days since progress made:</util.Text>
                 <util.Text style={styles.daysSinceProgressNumber}>{oldestOpenProject.daysSinceLastProgress}</util.Text>
               </util.View>
               <util.Text style={styles.label}>Oldest Open Project</util.Text>

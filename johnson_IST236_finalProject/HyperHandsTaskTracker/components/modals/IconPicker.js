@@ -3,7 +3,7 @@ import * as util from '../../index';
 
 const allIcons = Object.keys(util.Entypo.getRawGlyphMap());
 
-export const IconPicker = ({ onIconPicked }) => {
+export const IconPicker = ({ onIconPicked, currentIcon }) => {
   const [modalVisible, setModalVisible] = util.useState(false);
 
   const handleIconPress = (iconName) => {
@@ -14,7 +14,7 @@ export const IconPicker = ({ onIconPicked }) => {
   return (
     <util.View>
       <util.TouchableOpacity onPress={() => setModalVisible(true)}>
-        <util.Entypo name="ios-add" size={30} color={Colors.primary} />
+        <util.Entypo name={currentIcon || "plus"} size={60} color={Colors.primary} />
       </util.TouchableOpacity>
 
       <util.Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)}>

@@ -1,7 +1,7 @@
 import { Colors, Fonts, styles } from '../constants/index';
 import * as util from '../index'
-import { IconPicker, BottomTabNavigator } from '../components';
-
+import { IconPicker } from '../components';
+import * as ImagePicker from 'expo-image-picker';
 
 export const ProjectDetailsScreen = ({ route, navigation }) => {
   const [projectID, setProjectID] = util.useState('');
@@ -24,12 +24,22 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
     setProjectIcon(null);
   };
 
-  const addPhoto = () => {
-    util.ImagePicker.showImagePicker({}, (response) => {
-      if (!response.didCancel && !response.error) {
-        setPhotos([...photos, response.uri]);
+  const addPhoto = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Sorry, we need camera roll permissions to make this work!');
+    } else {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setPhotos([...photos, result.uri]);
       }
-    });
+    }
   };
 
   const saveProject = async () => {
@@ -61,9 +71,9 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
   };
   util.useEffect(() => {
     const fetchProject = async () => {
-      const projectId = navigation.getParam('projectId');
-      if (projectId) {
-        const storedData = await util.AsyncStorage.getItem(`@project_${projectId}`);
+      const projectID = route.params.projectID;
+      if (projectID) {
+        const storedData = await util.AsyncStorage.getItem(`@project_${projectID}`);
         if (storedData !== null) {
           const project = JSON.parse(storedData);
           setProjectID(project.projectID);
@@ -77,7 +87,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
         }
       } else {
         setCreatedDate(new Date());
-        setProjectID(uuidv4());
+        setProjectID(util.uuidv4());
       }
     };
 
@@ -97,12 +107,10 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
             <util.View style={styles.rowContainer}>
               <util.View style={styles.projectIconContainer}>
                 <util.Text style={styles.label}>Project Icon</util.Text>
-                <util.View style={styles.iconButtons}>
-                  <IconPicker onIconPicked={changeIcon} />
-                  <util.Pressable style={styles.redButton} onPress={removeIcon}>
-                    <util.Text style={styles.buttonText}>Remove</util.Text>
-                  </util.Pressable>
-                </util.View>
+                <IconPicker onIconPicked={changeIcon} currentIcon={projectIcon} />
+                <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
+                  <util.Text style={styles.buttonText}>Remove</util.Text>
+                </util.Pressable>
               </util.View>
               <util.View style={styles.titleContainer}>
                 <util.Text style={styles.label}>Project Title</util.Text>
@@ -113,10 +121,22 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
               </util.View>
             </util.View>
             <util.View style={styles.photoContainer}>
-              <util.Text style={styles.label}>Add Photo</util.Text>
-              <util.Pressable style={styles.button} onPress={addPhoto}>
-                <util.Text style={styles.button}>Add Photo</util.Text>
-              </util.Pressable>
+              <util.View style={styles.photoPicker}>
+                <util.Text style={styles.label}>Add Photo</util.Text>
+                <util.Pressable onPress={addPhoto}>
+                  <util.Entypo name={"plus"} size={60} color={Colors.primary} />
+                </util.Pressable>
+              </util.View>
+              {photos?.length > 0 && (
+                <util.View style={styles.photoGrid}>
+                  {photos?.map((photo, index) => {
+                    console.log(photo);
+                    return (
+                      <util.Image key={index} source={{ uri: photo }} style={styles.photo} />
+                    );
+                  })}
+                </util.View>
+              )}
             </util.View>
           </util.View>
           <util.View style={styles.contentsContainer}>

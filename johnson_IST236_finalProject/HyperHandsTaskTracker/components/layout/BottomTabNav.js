@@ -1,3 +1,4 @@
+import { size } from '@shopify/react-native-skia';
 import { Colors, Fonts, styles } from '../../constants/index';
 import * as util from '../../index';
 import { HomeScreen, ProjectIdeasScreen, StartedProjectsScreen } from '../../screens/index';
@@ -19,11 +20,11 @@ export const BottomTabNavigator = () => {
         tabBarShowLabel: false,
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === 'Home') {
-            return <util.MaterialIcons name="home" size={size} color={color} />;
+            return <util.MaterialIcons name="home" size={50} color={color} />;
           } else if (route.name === 'Ideas') {
-            return <util.MaterialCommunityIcons name="lightbulb-outline" size={size} color={color} />;
+            return <util.MaterialCommunityIcons name="lightbulb-outline" size={50} color={color} />;
           } else if (route.name === 'Projects') {
-            return <util.Entypo name="tools" size={size} color={color} />;
+            return <util.Entypo name="tools" size={50} color={color} />;
           }
         },
         tabBarActiveBackgroundColor: Colors.primary,
@@ -32,6 +33,7 @@ export const BottomTabNavigator = () => {
         tabBarInactiveTintColor: Colors.primaryText,
         tabBarStyle: {
           backgroundColor: Colors.primary,
+          height: height / 12,
         },
       })}
     >
@@ -41,13 +43,13 @@ export const BottomTabNavigator = () => {
         headerStyle: { backgroundColor: Colors.primary, height: height / 6 },
       }} />
       <Tab.Screen name="Ideas" component={ProjectIdeasScreen} options={{
-        headerStyle: { backgroundColor: Colors.primary },
+        headerStyle: { backgroundColor: Colors.primary, height: height / 7 },
         headerTitleStyle: { fontFamily: 'etnaSS', color: Colors.primaryText, fontSize: 50 },
         headerTitleAlign: 'center',
       }} />
       <Tab.Screen name="Projects" component={StartedProjectsScreen} options={{
-        headerStyle: { backgroundColor: Colors.primary },
-        headerTitleStyle: { fontFamily: 'etnaSS', color: Colors.primaryText, fontSize: 50 },
+        headerStyle: { backgroundColor: Colors.primary, height: height / 7 },
+        headerTitleStyle: { fontFamily: 'etnaSS', color: Colors.primaryText, fontSize: 50, },
         headerTitleAlign: 'center',
       }} />
     </Tab.Navigator>
