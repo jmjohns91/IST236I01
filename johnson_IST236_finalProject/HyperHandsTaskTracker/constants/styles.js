@@ -33,6 +33,10 @@ export const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: Colors.surface,
     borderRadius: 10,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   label: {
     fontSize: 16,
@@ -50,6 +54,11 @@ export const styles = StyleSheet.create({
     fontFamily: 'etnaSS',
     padding: 10,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   greenButton: {
     backgroundColor: Colors.accentColor,
@@ -57,6 +66,11 @@ export const styles = StyleSheet.create({
     fontFamily: 'etnaSS',
     padding: 10,
     borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   oldestProjectTitle: {
     color: Colors.secondaryText,
@@ -91,6 +105,7 @@ export const styles = StyleSheet.create({
     flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
+    shadowColor: '#000',
   },
   ooP: {
     flex: 1,
@@ -140,6 +155,12 @@ export const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 5,
     padding: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+    zIndex: 1,
   },
   projectIcon: {
     color: Colors.primaryVariant,
@@ -160,6 +181,11 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.error,
     padding: 10,
     borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   buttonRow: {
     flexDirection: 'row',
@@ -241,6 +267,7 @@ export const styles = StyleSheet.create({
   photoContainer: {
     flex: 1,
     alignItems: 'flex-start',
+    marginBottom: 10,
 
   },
   saveButton: {
@@ -250,6 +277,11 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     margin: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   cancelButton: {
     flex: 1,
@@ -258,6 +290,11 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     margin: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   bigButtonText: {
     color: Colors.primaryText,
@@ -292,6 +329,11 @@ export const styles = StyleSheet.create({
     flex: 2,
     minHeight: ' 9 %',
     margin: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
   },
   photoPicker: {
     alignItems: 'center',
@@ -305,6 +347,36 @@ export const styles = StyleSheet.create({
     width: 100,
     height: 100,
     margin: 5,
+    flex: 1,
   },
+  closeModalButton: {
+    position: 'absolute',
+    top: 40,
+    right: 20,
+    zIndex: 1000,
+  },
+  overlay: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: -6,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(244, 246, 255, 0.5)',
+    elevation: 4,
+    zIndex: 3,
+    padding: 0,
+    margin: -2,
+    marginHorizontal: -6,
 
+    borderRadius: 5,
+
+  },
+  centeredButton: {
+    position: 'absolute',
+    alignSelf: 'center',
+    verticalAlign: 'center',
+    top: '50%',
+  },
 });

@@ -1,7 +1,6 @@
 import { Colors, Fonts, styles } from './constants/index';
 import * as util from './index';
-import * as comp from './components/index';
-import { createDummyData } from './data/dummyData';
+import { BottomTabNavigator, IconPicker } from './components/layout/BottomTabNav';
 import { HomeScreen, ProjectIdeasScreen, ProjectDetailsScreen, IdeaDetailScreen, StartedProjectsScreen } from './screens/index';
 util.SplashScreen.preventAutoHideAsync();
 const Stack = util.createNativeStackNavigator();
@@ -34,7 +33,7 @@ export default function App() {
           >
             <Stack.Screen
               name="Landing"
-              component={comp.BottomTabNavigator}
+              component={BottomTabNavigator}
               options={{
                 headerShown: false,
               }}

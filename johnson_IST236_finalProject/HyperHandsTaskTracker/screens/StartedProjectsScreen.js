@@ -6,33 +6,37 @@ export const StartedProjectsScreen = () => {
   const [projects, setProjects] = util.useState([]);
   const [selectedPhoto, setSelectedPhoto] = util.useState(null);
   const { width, height } = util.useWindowDimensions();
-  util.useEffect(() => {
-    const fetchProjects = async () => {
-      let storedData = await util.AsyncStorage.getItem('@projectIDs');
-      let projectIDs = [];
-      if (storedData !== null) {
-        projectIDs = JSON.parse(storedData);
+  const imageUrls = selectedPhoto ? [{ url: selectedPhoto }] : [];
+  const fetchProjects = async () => {
+    let storedData = await util.AsyncStorage.getItem('@projectIDs');
+    let projectIDs = [];
+    if (storedData !== null) {
+      projectIDs = JSON.parse(storedData);
+    }
+
+    const projects = [];
+    for (let id of projectIDs) {
+      const projectData = await util.AsyncStorage.getItem(`@project_${id}`);
+      if (projectData !== null) {
+        const project = JSON.parse(projectData);
+        projects.push(project);
       }
+    }
 
-      const projectPromises = projectIDs.map(projectID => util.AsyncStorage.getItem(`@project_${projectID}`));
-      const projectData = await Promise.all(projectPromises);
-      let projects = projectData.map(data => JSON.parse(data));
+    projects.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
 
-      projects.sort((a, b) => {
-        if (a.completed === b.completed) {
-          return new Date(b.createdDate) - new Date(a.createdDate);
-        } else if (a.completed) {
-          return 1;
-        } else {
-          return -1;
-        }
-      });
+    setProjects(projects);
+  };
 
-      setProjects(projects);
-    };
-
+  util.useEffect(() => {
     fetchProjects();
   }, []);
+
+  util.useFocusEffect(
+    util.useCallback(() => {
+      fetchProjects();
+    }, [])
+  );
 
   const handleMarkProgress = (projectID) => {
     setProjects(prevProjects => {
@@ -103,11 +107,18 @@ export const StartedProjectsScreen = () => {
           onPress: async () => {
             setProjects(prevProjects => {
               const updatedProjects = prevProjects.filter(project => project.projectID !== projectID);
-              updatedProjects.forEach(async project => {
-                await util.AsyncStorage.setItem(`@project_${project.projectID}`, JSON.stringify(project));
-              });
               return updatedProjects;
             });
+            await util.AsyncStorage.removeItem(`@project_${projectID}`);
+
+            let storedData = await util.AsyncStorage.getItem('@projectIDs');
+            let projectIDs = [];
+            if (storedData !== null) {
+              projectIDs = JSON.parse(storedData);
+            }
+
+            const updatedProjectIDs = projectIDs.filter(id => id !== projectID);
+            await util.AsyncStorage.setItem('@projectIDs', JSON.stringify(updatedProjectIDs));
           }
         }
       ]
@@ -115,27 +126,38 @@ export const StartedProjectsScreen = () => {
   };
 
   const handleEdit = (projectID) => {
-    navigation.navigate('ProjectDetailsScreen', { projectID: projectID });
+    navigation.navigate('ProjectDetailsScreen', { projectID });
   };
-  const handleViewPhoto = async (photoId) => {
-    const projects = JSON.parse(await util.AsyncStorage.getItem('projects'));
-    const photo = projects.flatMap(project => project.photos).find(photo => photo.projectID === photoId);
-    setSelectedPhoto(photo);
+  const handleViewPhoto = (photoUri) => {
+    setSelectedPhoto(photoUri);
   };
 
-  const handleRemovePhoto = async (projectID, photoId) => {
-    let projects = JSON.parse(await util.AsyncStorage.getItem('projects'));
-    projects = projects.map(project =>
-      project.projectID === projectID
-        ? { ...project, photos: project.photos.filter(photo => photo.projectID !== photoId) }
-        : project
+  const handleRemovePhoto = (projectID, photoIndex) => {
+    util.Alert.alert(
+      "Confirm Remove",
+      "Are you sure you want to remove this photo?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "OK", onPress: async () => {
+            let updatedProjects = projects.map(project => {
+              if (project.projectID === projectID) {
+                let newPhotos = [...project.photos];
+                newPhotos.splice(photoIndex, 1);  // Remove the photo by index
+                return { ...project, photos: newPhotos };
+              }
+              return project;
+            });
+            await util.AsyncStorage.setItem('projects', JSON.stringify(updatedProjects)); // Save to AsyncStorage
+            setProjects(updatedProjects);  // Update state
+          }
+        }
+      ]
     );
-    await util.AsyncStorage.setItem('projects', JSON.stringify(projects));
-    setProjects(projects);
   };
 
   const handleAddNewProject = () => {
-    navigation.navigate('ProjectDetailsScreen');
+    navigation.navigate('ProjectDetailsScreen', {});
   };
   return (
     <util.View style={styles.projectsContainer}>
@@ -143,18 +165,22 @@ export const StartedProjectsScreen = () => {
         {projects.map((project) => (
           <util.View
             key={project.projectID}
-            style={[styles.projectCard, { opacity: project.completed ? 0.5 : 1 }]}
+            style={styles.projectCard}
           ><util.View style={styles.projectHeader}>
               <util.Entypo name={project.projectIcon} size={height / 15} color={Colors.primaryVariant} padding={5} />
               <util.Text style={styles.projectTitle}>{project.projectTitle}</util.Text></util.View>
             <util.Text style={styles.projectContents}>{project.projectContents}</util.Text>
-            {/* {project.photos.map((photo) => (
-              <util.View key={photo.projectID} style={styles.photoContainer}>
-                <util.Image source={{ uri: photo.uri }} style={styles.photo} />
-            <util.Pressable style={styles.blueButton} onPress={() => handleViewPhoto(photo)}> <util.Text style={styles.buttonText}>View Photo</util.Text></util.Pressable>
-            <util.Pressable style={styles.redButton} onPress={() => handleRemovePhoto(project.projectID, photo.projectID)}> <util.Text style={styles.buttonText}>Remove Photo</util.Text></util.Pressable>
-          </util.View> 
-        ))}*/}
+            {project.photos.map((photoUri, photoIndex) => (
+              <util.View key={`${project.projectID}-${photoIndex}`} style={styles.photoContainer}>
+                <util.Image source={{ uri: photoUri }} style={styles.photo} />
+                <util.Pressable style={styles.blueButton} onPress={() => handleViewPhoto(photoUri)}>
+                  <util.Text style={styles.buttonText}>View Photo</util.Text>
+                </util.Pressable>
+                <util.Pressable style={styles.redButton} onPress={() => handleRemovePhoto(project.projectID, photoIndex)}>
+                  <util.Text style={styles.buttonText}>Remove Photo</util.Text>
+                </util.Pressable>
+              </util.View>
+            ))}
             <util.View style={styles.buttonRow}>
               <util.Pressable style={styles.greenButton} onPress={() => handleMarkProgress(project.projectID)}>
                 <util.Text style={styles.buttonText}>Mark Progress</util.Text>
@@ -170,24 +196,41 @@ export const StartedProjectsScreen = () => {
               </util.Pressable>
             </util.View>
             {project.completed && (
-              <util.Pressable style={styles.blueButton} onPress={() => handleReopenProject(project.projectID)}>
-                <util.Text style={styles.buttonText}>Reopen Project</util.Text>
-              </util.Pressable>
+              <>
+                <util.View style={[styles.overlay, { zIndex: 3 }]} />
+                <util.Pressable
+                  style={[styles.blueButton, styles.centeredButton, { zIndex: 4 }]}
+                  onPress={() => handleReopenProject(project.projectID)}
+                >
+                  <util.Text style={styles.buttonText}>Reopen Project</util.Text>
+                </util.Pressable>
+              </>
             )}
           </util.View>
-        ))
-        }
-      </util.ScrollView >
+        ))}
+      </util.ScrollView>
       <util.Pressable style={[styles.greenButton, styles.bigButton]} title="Add New Project" onPress={handleAddNewProject}><util.Text style={styles.bigButtonText}>Add New Project</util.Text></util.Pressable>
-      <util.Modal
-        animationType="slide"
-        transparent={true}
-        visible={selectedPhoto !== null}
-        onRequestClose={() => setSelectedPhoto(null)}
-      >
-      </util.Modal>
-    </util.View >
+      {selectedPhoto && (
+        <util.Modal
+          visible={!!selectedPhoto}
+          transparent={true}
+          onRequestClose={() => setSelectedPhoto(null)}
+        >
+          <util.ImageViewer
+            imageUrls={imageUrls}
+            enableSwipeDown={true}
+            onSwipeDown={() => setSelectedPhoto(null)}
+            saveToLocalByLongPress={false}
+          />
+          <util.Pressable
+            style={styles.closeModalButton}
+            onPress={() => setSelectedPhoto(null)}
+          >
+            <util.Text style={styles.buttonText}>Close</util.Text>
+          </util.Pressable>
+        </util.Modal>
+      )}
+    </util.View>
   );
 };
-
 

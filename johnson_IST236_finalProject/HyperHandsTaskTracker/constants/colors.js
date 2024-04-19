@@ -9,5 +9,4 @@ export const Colors = {
   error: "#EA4335",
   success: "#48C774",
   surface: "#FFFFFF",
-
 }

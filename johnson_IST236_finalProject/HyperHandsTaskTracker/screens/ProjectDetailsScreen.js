@@ -1,20 +1,22 @@
 import { Colors, Fonts, styles } from '../constants/index';
 import * as util from '../index'
-import { IconPicker } from '../components';
+import { IconPicker } from '../components/modals/IconPicker';
 import * as ImagePicker from 'expo-image-picker';
 
 export const ProjectDetailsScreen = ({ route, navigation }) => {
-  const [projectID, setProjectID] = util.useState('');
-  const [icon, setIcon] = util.useState(null);
+  const isNewProject = !route.params?.projectID;
+  const [projectID, setProjectID] = util.useState(() => isNewProject ? util.uuidv4() : '');
+  const [icon, setIcon] = util.useState("plus");
   const [projectIcon, setProjectIcon] = util.useState(null);
   const [projectTitle, setProjectTitle] = util.useState('');
   const [projectContents, setProjectContents] = util.useState('');
   const [photos, setPhotos] = util.useState([]);
-  const [createdDate, setCreatedDate] = util.useState(new Date());
-  const [lastEditedDate, setLastEditedDate] = util.useState(new Date());
-  const [lastMarkedProgressDate, setLastMarkedProgressDate] = util.useState(new Date());
-  const [showIconPicker, setShowIconPicker] = util.useState(false);
+  const [createdDate, setCreatedDate] = util.useState(() => new Date());
+  const [lastEditedDate, setLastEditedDate] = util.useState(() => new Date());
+  const [lastMarkedProgressDate, setLastMarkedProgressDate] = util.useState(() => new Date());
+  const [showIconPicker, setShowIconPicker] = util.useState(true);
   const changeIcon = (newIcon) => {
+    setProjectIcon(newIcon);
     setIcon(newIcon);
   };
   const insets = util.useSafeAreaInsets();
@@ -36,8 +38,8 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
         quality: 1,
       });
 
-      if (!result.canceled) {
-        setPhotos([...photos, result.uri]);
+      if (!result.canceled && result.assets) {
+        setPhotos(photos => [...photos, result.assets[0].uri]);
       }
     }
   };
@@ -54,14 +56,9 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
       lastMarkedProgressDate,
       completed: false,
     };
-
     await util.AsyncStorage.setItem(`@project_${projectID}`, JSON.stringify(projectData));
-
     let storedData = await util.AsyncStorage.getItem('@projectIDs');
-    let projectIDs = [];
-    if (storedData !== null) {
-      projectIDs = JSON.parse(storedData);
-    }
+    let projectIDs = storedData ? JSON.parse(storedData) : [];
     if (!projectIDs.includes(projectID)) {
       projectIDs.push(projectID);
     }
@@ -71,28 +68,24 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
   };
   util.useEffect(() => {
     const fetchProject = async () => {
-      const projectID = route.params.projectID;
-      if (projectID) {
-        const storedData = await util.AsyncStorage.getItem(`@project_${projectID}`);
-        if (storedData !== null) {
+      if (!isNewProject && route.params.projectID) {
+        const storedData = await util.AsyncStorage.getItem(`@project_${route.params.projectID}`);
+        if (storedData) {
           const project = JSON.parse(storedData);
           setProjectID(project.projectID);
           setProjectIcon(project.projectIcon);
+          setIcon(project.projectIcon || "plus");
           setProjectTitle(project.projectTitle);
           setProjectContents(project.projectContents);
-          setPhotos(project.photos);
+          setPhotos(project.photos || []);
           setCreatedDate(new Date(project.createdDate));
           setLastEditedDate(new Date(project.lastEditedDate));
           setLastMarkedProgressDate(new Date(project.lastMarkedProgressDate));
         }
-      } else {
-        setCreatedDate(new Date());
-        setProjectID(util.uuidv4());
       }
     };
-
     fetchProject();
-  }, []);
+  }, [route.params.projectID]);
   return (
     <util.SafeAreaProvider style={{
       paddingTop: insets.top,
@@ -107,10 +100,13 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
             <util.View style={styles.rowContainer}>
               <util.View style={styles.projectIconContainer}>
                 <util.Text style={styles.label}>Project Icon</util.Text>
-                <IconPicker onIconPicked={changeIcon} currentIcon={projectIcon} />
-                <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
-                  <util.Text style={styles.buttonText}>Remove</util.Text>
-                </util.Pressable>
+                {showIconPicker && (
+                  <IconPicker onIconPicked={changeIcon} currentIcon={icon} />)}
+                {projectIcon && (
+                  <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
+                    <util.Text style={styles.buttonText}>Remove</util.Text>
+                  </util.Pressable>
+                )}
               </util.View>
               <util.View style={styles.titleContainer}>
                 <util.Text style={styles.label}>Project Title</util.Text>
@@ -127,14 +123,11 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
                   <util.Entypo name={"plus"} size={60} color={Colors.primary} />
                 </util.Pressable>
               </util.View>
-              {photos?.length > 0 && (
+              {photos.length > 0 && (
                 <util.View style={styles.photoGrid}>
-                  {photos?.map((photo, index) => {
-                    console.log(photo);
-                    return (
-                      <util.Image key={index} source={{ uri: photo }} style={styles.photo} />
-                    );
-                  })}
+                  {photos.map((photoUri, index) => (
+                    <util.Image key={index} source={{ uri: photoUri }} style={styles.photo} />
+                  ))}
                 </util.View>
               )}
             </util.View>

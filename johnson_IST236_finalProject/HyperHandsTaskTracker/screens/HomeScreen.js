@@ -3,50 +3,50 @@ import { Colors, Fonts, styles } from '../constants/index';
 export const HomeScreen = ({ navigation, route }) => {
   const [tasksCompletedPercentage, setTasksCompletedPercentage] = util.useState(0);
   const [openProjects, setOpenProjects] = util.useState(0);
+  const [liquidGaugeData, setLiquidGaugeData] = util.useState(0);
   const [oldestOpenProject, setOldestOpenProject] = util.useState(null);
   const insets = util.useSafeAreaInsets();
   const { width, height } = util.useWindowDimensions();
   const handleNewProject = () => {
-    navigation.navigate('ProjectDetailsScreen');
+    navigation.navigate('ProjectDetailsScreen', {});
   };
-  <util.LiquidGauge
 
-  />
   const handleAddNewIdea = () => {
     navigation.navigate('IdeaDetailScreen');
   };
-  util.useEffect(() => {
-    const fetchProjectsData = async () => {
-      const keys = await util.AsyncStorage.getAllKeys();
-      const projectKeys = keys.filter(key => key.startsWith('@project_'));
-      const projectData = await util.AsyncStorage.multiGet(projectKeys);
-      const projects = projectData.map(item => JSON.parse(item[1]));
-      const completedProjects = projects.filter(project => project.completed);
-      const tasksCompletedPercentage = (completedProjects.length / projects.length) * 100;
-      setTasksCompletedPercentage(tasksCompletedPercentage);
-      const openProjects = projects.filter(project => !project.completed);
-      setOpenProjects(openProjects.length);
-      const oldestOpenProject = openProjects.reduce((oldest, project) => {
-        const projectDate = new Date(project.createdDate);
-        const oldestDate = oldest ? new Date(oldest.createdDate) : null;
+  util.useFocusEffect(
+    util.useCallback(() => {
+      const fetchProjectsData = async () => {
+        const keys = await util.AsyncStorage.getAllKeys();
+        const projectKeys = keys.filter(key => key.startsWith('@project_'));
+        const projectData = await util.AsyncStorage.multiGet(projectKeys);
+        const projects = projectData.map(item => JSON.parse(item[1]));
+        const completedProjects = projects.filter(project => project.completed);
+        const tasksCompletedPercentage = (completedProjects.length / projects.length) * 100;
+        setTasksCompletedPercentage(tasksCompletedPercentage);
+        const openProjects = projects.filter(project => !project.completed);
+        setOpenProjects(openProjects.length);
+        const oldestOpenProject = openProjects.reduce((oldest, project) => {
+          const projectDate = new Date(project.createdDate);
+          const oldestDate = oldest ? new Date(oldest.createdDate) : null;
 
-        if (!oldest || projectDate < oldestDate) {
-          const daysSinceLastProgress = Math.ceil((new Date() - new Date(project.lastMarkedProgressDate)) / (1000 * 60 * 60 * 24));
-          return {
-            ...project,
-            daysSinceLastProgress,
-          };
-        } else {
-          return oldest;
-        }
-      }, null);
+          if (!oldest || projectDate < oldestDate) {
+            const daysSinceLastProgress = Math.ceil((new Date() - new Date(project.lastMarkedProgressDate)) / (1000 * 60 * 60 * 24));
+            return {
+              ...project,
+              daysSinceLastProgress,
+            };
+          } else {
+            return oldest;
+          }
+        }, null);
 
-      setOldestOpenProject(oldestOpenProject);
-    };
+        setOldestOpenProject(oldestOpenProject);
+      };
 
-    fetchProjectsData();
-
-  }, []);
+      fetchProjectsData();
+    }, [])
+  );
   const handleOldestOpenProject = (projectID) => {
     navigation.navigate('ProjectDetailsScreen', { projectID: projectID });
   };
