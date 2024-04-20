@@ -61,14 +61,27 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
     let projectIDs = storedData ? JSON.parse(storedData) : [];
     if (!projectIDs.includes(projectID)) {
       projectIDs.push(projectID);
+      await util.AsyncStorage.setItem('@projectIDs', JSON.stringify(projectIDs));
     }
-    await util.AsyncStorage.setItem('@projectIDs', JSON.stringify(projectIDs));
+    if (route.params?.ideaID) {
+      await util.AsyncStorage.removeItem(`@idea_${route.params.ideaID}`);
+      storedData = await util.AsyncStorage.getItem('@ideaIDs');
+      const ideaIDs = storedData ? JSON.parse(storedData) : [];
+      const updatedIdeaIDs = ideaIDs.filter(id => id !== route.params.ideaID);
+      await util.AsyncStorage.setItem('@ideaIDs', JSON.stringify(updatedIdeaIDs));
+    }
 
     navigation.goBack();
   };
   util.useEffect(() => {
-    const fetchProject = async () => {
-      if (!isNewProject && route.params.projectID) {
+    const loadProjectData = async () => {
+      if (isNewProject) {
+        if (route.params?.ideaID) {
+          setProjectIcon(route.params.ideaIcon);
+          setIcon(route.params.ideaIcon);
+          setProjectTitle(route.params.ideaTitle);
+        }
+      } else if (route.params?.projectID) {
         const storedData = await util.AsyncStorage.getItem(`@project_${route.params.projectID}`);
         if (storedData) {
           const project = JSON.parse(storedData);
@@ -84,8 +97,8 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
         }
       }
     };
-    fetchProject();
-  }, [route.params.projectID]);
+    loadProjectData();
+  }, [route.params]);
   return (
     <util.SafeAreaProvider style={{
       paddingTop: insets.top,

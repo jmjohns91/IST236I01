@@ -1,15 +1,19 @@
 import { Colors, Fonts, styles } from '../constants/index';
 import * as util from '../index'
 import { IconPicker } from '../components/modals/IconPicker';
-export const IdeaDetailScreen = ({ route, navigation }) => {
-  const [ideaID, setIdeaID] = util.useState('');
+
+export const IdeaDetailsScreen = ({ route, navigation }) => {
+  const isNewIdea = !route.params?.ideaID;
+  const [ideaID, setIdeaID] = util.useState(() => isNewIdea ? util.uuidv4() : '');
   const [icon, setIcon] = util.useState("plus");
   const [ideaIcon, setIdeaIcon] = util.useState(null);
   const [ideaTitle, setIdeaTitle] = util.useState('');
-  const [createdDate, setCreatedDate] = util.useState(new Date());
+  const [createdDate, setCreatedDate] = util.useState(() => new Date());
+  const [lastEditedDate, setLastEditedDate] = util.useState(() => new Date());
   const [showIconPicker, setShowIconPicker] = util.useState(true);
   const changeIcon = (newIcon) => {
     setIdeaIcon(newIcon);
+    setIcon(newIcon);
   };
   const insets = util.useSafeAreaInsets();
   const { width, height } = util.useWindowDimensions();
@@ -25,15 +29,11 @@ export const IdeaDetailScreen = ({ route, navigation }) => {
       ideaIcon,
       ideaTitle,
       createdDate,
+      lastEditedDate: new Date(),
     };
-
     await util.AsyncStorage.setItem(`@idea_${ideaID}`, JSON.stringify(ideaData));
-
     let storedData = await util.AsyncStorage.getItem('@ideaIDs');
-    let ideaIDs = [];
-    if (storedData !== null) {
-      ideaIDs = JSON.parse(storedData);
-    }
+    let ideaIDs = storedData ? JSON.parse(storedData) : [];
     if (!ideaIDs.includes(ideaID)) {
       ideaIDs.push(ideaID);
     }
@@ -43,24 +43,21 @@ export const IdeaDetailScreen = ({ route, navigation }) => {
   };
   util.useEffect(() => {
     const fetchIdea = async () => {
-      const ideaID = route.params.ideaID;
-      if (ideaID) {
-        const storedData = await util.AsyncStorage.getItem(`@idea_${ideaID}`);
-        if (storedData !== null) {
-          const idea = JSON.parse(storedData);
-          setIdeaID(idea.ideaID);
-          setIdeaIcon(idea.ideaIcon);
-          setIdeaTitle(idea.ideaTitle);
-          setCreatedDate(new Date(idea.createdDate));
+      if (!isNewIdea && route.params.ideaID) {
+        const storedData = await util.AsyncStorage.getItem(`@idea_${route.params.ideaID}`);
+        if (storedData) {
+          const project = JSON.parse(storedData);
+          setIdeaID(project.ideaID);
+          setIdeaIcon(project.ideaIcon);
+          setIcon(project.ideaIcon || "plus");
+          setIdeaTitle(project.ideaTitle);
+          setCreatedDate(new Date(project.createdDate));
+          setLastEditedDate(new Date(project.lastEditedDate));
         }
-      } else {
-        setCreatedDate(new Date());
-        setIdeaID(util.uuidv4());
       }
     };
-
     fetchIdea();
-  }, []);
+  }, [route.params.ideaID]);
   return (
     <util.SafeAreaProvider style={{
       paddingTop: insets.top,
@@ -77,9 +74,11 @@ export const IdeaDetailScreen = ({ route, navigation }) => {
                 <util.Text style={styles.label}>Idea Icon</util.Text>
                 {showIconPicker && (
                   <IconPicker onIconPicked={changeIcon} currentIcon={icon} />)}
-                <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
-                  <util.Text style={styles.buttonText}>Remove</util.Text>
-                </util.Pressable>
+                {ideaIcon && (
+                  <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
+                    <util.Text style={styles.buttonText}>Remove</util.Text>
+                  </util.Pressable>
+                )}
               </util.View>
               <util.View style={styles.titleContainer}>
                 <util.Text style={styles.label}>Idea Title</util.Text>
@@ -102,4 +101,5 @@ export const IdeaDetailScreen = ({ route, navigation }) => {
       </util.View>
     </util.SafeAreaProvider>
   );
-}
+};
+

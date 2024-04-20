@@ -22,11 +22,11 @@ export const IconPicker = ({ onIconPicked, currentIcon }) => {
           data={allIcons}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
-            <util.TouchableOpacity onPress={() => handleIconPress(item)}>
-              <util.Entypo name={item} size={60} color={Colors.primary} />
+            <util.TouchableOpacity style={styles.iconPickerContainer} onPress={() => handleIconPress(item)}>
+              <util.Entypo name={item} size={50} color={Colors.primary} />
             </util.TouchableOpacity>
           )}
-          numColumns={8}
+          numColumns={7}
         />
       </util.Modal>
     </util.View>

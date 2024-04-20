@@ -326,7 +326,7 @@ export const styles = StyleSheet.create({
   bigButton: {
     padding: 5,
     borderRadius: 10,
-    flex: 2,
+    // flex: 2,
     minHeight: ' 9 %',
     margin: 3,
     shadowColor: '#000',
@@ -378,5 +378,12 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
     verticalAlign: 'center',
     top: '50%',
+  },
+  iconPickerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    padding: 3,
   },
 });

@@ -1,7 +1,7 @@
 import { Colors, Fonts, styles } from './constants/index';
 import * as util from './index';
 import { BottomTabNavigator, IconPicker } from './components/layout/BottomTabNav';
-import { HomeScreen, ProjectIdeasScreen, ProjectDetailsScreen, IdeaDetailScreen, StartedProjectsScreen } from './screens/index';
+import { HomeScreen, ProjectIdeasScreen, ProjectDetailsScreen, IdeaDetailsScreen, StartedProjectsScreen } from './screens/index';
 util.SplashScreen.preventAutoHideAsync();
 const Stack = util.createNativeStackNavigator();
 
@@ -21,7 +21,7 @@ export default function App() {
 
     return (
       <util.NavigationContainer onReady={onLayoutRootView} >
-        <util.StatusBar style='auto' />
+        <util.StatusBar style='auto' translucent={true} />
         <util.SafeAreaProvider>
           <Stack.Navigator
             initialRouteName='Home'
@@ -47,8 +47,8 @@ export default function App() {
               }}
             />
             <Stack.Screen
-              name="IdeaDetailScreen"
-              component={IdeaDetailScreen}
+              name="IdeaDetailsScreen"
+              component={IdeaDetailsScreen}
               options={{
                 headerBackTitleVisible: false,
                 headerShown: false,

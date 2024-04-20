@@ -4,7 +4,6 @@ import * as util from '../index'
 export const ProjectIdeasScreen = () => {
   const navigation = util.useNavigation();
   const [ideas, setIdeas] = util.useState([]);
-
   const { width, height } = util.useWindowDimensions();
   const fetchIdeas = async () => {
     let storedData = await util.AsyncStorage.getItem('@ideaIDs');
@@ -13,19 +12,16 @@ export const ProjectIdeasScreen = () => {
       ideaIDs = JSON.parse(storedData);
     }
 
-    const ideaPromises = ideaIDs.map(ideaID => util.AsyncStorage.getItem(`@idea_${ideaID}`));
-    const ideaData = await Promise.all(ideaPromises);
-    let ideas = ideaData.map(data => JSON.parse(data));
-
-    ideas.sort((a, b) => {
-      if (a === b) {
-        return new Date(b.createdDate) - new Date(a.createdDate);
-      } else if (a) {
-        return 1;
-      } else {
-        return -1;
+    const ideas = [];
+    for (let id of ideaIDs) {
+      const projectData = await util.AsyncStorage.getItem(`@idea_${id}`);
+      if (projectData !== null) {
+        const idea = JSON.parse(projectData);
+        ideas.push(idea);
       }
-    });
+    }
+
+    ideas.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
 
     setIdeas(ideas);
   };
@@ -33,11 +29,14 @@ export const ProjectIdeasScreen = () => {
   util.useEffect(() => {
     fetchIdeas();
   }, []);
+
   util.useFocusEffect(
     util.useCallback(() => {
       fetchIdeas();
     }, [])
   );
+
+
   const handleDelete = async (ideaID) => {
     util.Alert.alert(
       "Delete Idea",
@@ -63,18 +62,31 @@ export const ProjectIdeasScreen = () => {
             }
 
             const updatedIdeaIDs = ideaIDs.filter(id => id !== ideaID);
-            e
             await util.AsyncStorage.setItem('@ideaIDs', JSON.stringify(updatedIdeaIDs));
           }
         }
       ]
     );
   };
+
   const handleEdit = (ideaID) => {
-    navigation.navigate('IdeaDetailScreen', { ideaID: ideaID });
+    navigation.navigate('IdeaDetailsScreen', { ideaID });
   };
+
+  const handleMakeProject = (ideaID) => {
+    const selectedIdea = ideas.find(idea => idea.ideaID === ideaID);
+    if (selectedIdea) {
+      navigation.navigate('ProjectDetailsScreen', {
+        ideaID: selectedIdea.ideaID,
+        ideaIcon: selectedIdea.ideaIcon,
+        ideaTitle: selectedIdea.ideaTitle,
+        isNewProject: true
+      });
+    }
+  };
+
   const handleAddNewIdea = () => {
-    navigation.navigate('IdeaDetailScreen');
+    navigation.navigate('IdeaDetailsScreen', {});
   };
   return (
     <util.View style={styles.projectsContainer}>
@@ -83,10 +95,16 @@ export const ProjectIdeasScreen = () => {
           <util.View
             key={idea.ideaID}
             style={styles.projectCard}
-          ><util.View style={styles.projectHeader}>
+          >
+            <util.View style={styles.projectHeader}>
               <util.Entypo name={idea.ideaIcon} size={height / 15} color={Colors.primaryVariant} padding={5} />
-              <util.Text style={styles.projectTitle}>{idea.ideaTitle}</util.Text></util.View>
+              <util.Text style={styles.projectTitle}>{idea.ideaTitle}</util.Text>
+            </util.View>
+
             <util.View style={styles.buttonRow}>
+              <util.Pressable style={styles.greenButton} onPress={() => handleMakeProject(idea.ideaID)}>
+                <util.Text style={styles.buttonText}>Make Project</util.Text>
+              </util.Pressable>
               <util.Pressable style={styles.redButton} onPress={() => handleDelete(idea.ideaID)}>
                 <util.Text style={styles.buttonText}>Delete</util.Text>
               </util.Pressable>
@@ -95,10 +113,12 @@ export const ProjectIdeasScreen = () => {
               </util.Pressable>
             </util.View>
           </util.View>
-        ))
-        }
-      </util.ScrollView >
-      <util.Pressable style={[styles.greenButton, styles.bigButton]} title="Add New Idea" onPress={handleAddNewIdea}><util.Text style={styles.bigButtonText}>Add New Idea</util.Text></util.Pressable>
-    </util.View >
+        ))}
+      </util.ScrollView>
+      <util.Pressable style={[styles.greenButton, styles.bigButton]} title="Add New Idea" onPress={handleAddNewIdea}>
+        <util.Text style={styles.bigButtonText}>Add New Idea</util.Text>
+      </util.Pressable>
+    </util.View>
   );
-}
+};
+

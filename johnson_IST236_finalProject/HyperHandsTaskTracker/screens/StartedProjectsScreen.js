@@ -8,32 +8,22 @@ export const StartedProjectsScreen = () => {
   const { width, height } = util.useWindowDimensions();
   const imageUrls = selectedPhoto ? [{ url: selectedPhoto }] : [];
   const fetchProjects = async () => {
-    let storedData = await util.AsyncStorage.getItem('@projectIDs');
-    let projectIDs = [];
-    if (storedData !== null) {
-      projectIDs = JSON.parse(storedData);
-    }
-
-    const projects = [];
-    for (let id of projectIDs) {
-      const projectData = await util.AsyncStorage.getItem(`@project_${id}`);
-      if (projectData !== null) {
-        const project = JSON.parse(projectData);
-        projects.push(project);
-      }
-    }
-
+    const keys = await util.AsyncStorage.getAllKeys();
+    const projectKeys = keys.filter(key => key.startsWith('@project_'));
+    const projectData = await util.AsyncStorage.multiGet(projectKeys);
+    const projects = projectData.map(item => JSON.parse(item[1]));
     projects.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
-
     setProjects(projects);
   };
 
   util.useEffect(() => {
+    console.log('Fetching projects on mount...');
     fetchProjects();
   }, []);
 
   util.useFocusEffect(
     util.useCallback(() => {
+      console.log('Refetching projects on focus...');
       fetchProjects();
     }, [])
   );
