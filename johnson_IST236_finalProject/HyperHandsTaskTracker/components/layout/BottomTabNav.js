@@ -24,13 +24,13 @@ export const BottomTabNavigator = () => {
           let IconComponent;
 
           if (route.name === 'Home') {
-            iconName = focused ? "home-filled" : "home";
-            IconComponent = util.MaterialIcons;
-          } else if (route.name === 'Ideas') {
-            iconName = focused ? "lightbulb-on" : "lightbulb-outline";
+            iconName = focused ? "home" : "home-outline";
             IconComponent = util.MaterialCommunityIcons;
+          } else if (route.name === 'Ideas') {
+            iconName = focused ? "lightbulb" : "lightbulb-outline";
+            IconComponent = util.MaterialIcons;
           } else if (route.name === 'Projects') {
-            iconName = focused ? "toolbox-outline" : "toolbox";
+            iconName = focused ? "toolbox" : "toolbox-outline";
             IconComponent = util.MaterialCommunityIcons;
           }
 
@@ -59,10 +59,8 @@ export const BottomTabNavigator = () => {
           elevation: 20,
           borderRadius: 15,
           marginHorizontal: 5,
-          position: 'absolute',
-          bottom: 10,
-          left: 10,
-          right: 10,
+          position: 'fixed',
+          bottom: 1,
           overflow: 'hidden',
         },
       })}

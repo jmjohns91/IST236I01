@@ -21,7 +21,7 @@ export default function App() {
 
     return (
       <util.NavigationContainer onReady={onLayoutRootView} >
-        <util.StatusBar style='auto' translucent={true} />
+        <util.StatusBar translucent={true} />
         <util.SafeAreaProvider>
           <Stack.Navigator
             initialRouteName='Home'

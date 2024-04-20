@@ -26,35 +26,35 @@ const icons = [
   { name: "tools", library: "Entypo" },
   { name: "format-paint", library: "MaterialIcons" },
   { name: "home-modern", library: "MaterialCommunityIcons" },
-  { name: "bike", library: "MaterialCommunityIcons" },
+  { name: "pedal-bike", library: "MaterialIcons" },
   { name: "flower-tulip", library: "MaterialCommunityIcons" },
   { name: "scissors-cutting", library: "MaterialCommunityIcons" },
   { name: "leaf", library: "MaterialCommunityIcons" },
   { name: "solar-panel-large", library: "MaterialCommunityIcons" },
-  { name: "book", library: "AntDesign" },
+  { name: "notebook", library: "MaterialCommunityIcons" },
   { name: "music", library: "Entypo" },
   { name: "web", library: "MaterialCommunityIcons" },
   { name: "archive", library: "MaterialCommunityIcons" },
   { name: "dice-multiple", library: "MaterialCommunityIcons" },
   { name: "cellphone", library: "MaterialCommunityIcons" },
-  { name: "coffee", library: "MaterialCommunityIcons" }
+  { name: "coffee", library: "MaterialIcons" }
 ];
 const ideaIcons = [
   { name: "code", library: "Entypo" },
-  { name: "mobile1", library: "AntDesign" },
+  { name: "cellphone", library: "MaterialCommunityIcons" },
   { name: "calculator", library: "MaterialCommunityIcons" },
   { name: "book-open-page-variant", library: "MaterialCommunityIcons" },
   { name: "guitar-acoustic", library: "MaterialCommunityIcons" },
-  { name: "run", library: "MaterialCommunityIcons" },
-  { name: "yoga", library: "MaterialCommunityIcons" },
+  { name: "directions-run", library: "MaterialIcons" },
+  { name: "self-improvement", library: "MaterialIcons" },
   { name: "airplanemode-active", library: "MaterialIcons" },
   { name: "food-fork-drink", library: "MaterialCommunityIcons" },
-  { name: "camera", library: "Entypo" },
+  { name: "camera-alt", library: "MaterialIcons" },
   { name: "codesquare", library: "AntDesign" },
   { name: "toolbox", library: "MaterialCommunityIcons" },
   { name: "cards-playing-outline", library: "MaterialCommunityIcons" },
-  { name: "apps", library: "MaterialCommunityIcons" },
-  { name: "coffee-maker", library: "MaterialCommunityIcons" }
+  { name: "code", library: "Entypo" },
+  { name: "coffee-maker", library: "MaterialIcons" }
 ];
 export const insertDummyData = async () => {
   let projectIDs = [];
