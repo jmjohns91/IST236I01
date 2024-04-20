@@ -1,12 +1,12 @@
-import { Colors, Fonts, styles } from '../constants/index';
+import { Colors, Fonts, styles, icons } from '../constants/index';
 import * as util from '../index'
-import { IconPicker } from '../components/modals/IconPicker';
+import * as comp from '../components/index';
 import * as ImagePicker from 'expo-image-picker';
 
 export const ProjectDetailsScreen = ({ route, navigation }) => {
   const isNewProject = !route.params?.projectID;
   const [projectID, setProjectID] = util.useState(() => isNewProject ? util.uuidv4() : '');
-  const [icon, setIcon] = util.useState("plus");
+  const [icon, setIcon] = util.useState({ name: "add", library: "MaterialIcons" });
   const [projectIcon, setProjectIcon] = util.useState(null);
   const [projectTitle, setProjectTitle] = util.useState('');
   const [projectContents, setProjectContents] = util.useState('');
@@ -47,7 +47,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
   const saveProject = async () => {
     const projectData = {
       projectID,
-      projectIcon,
+      projectIcon: { name: icon.name, library: icon.library },
       projectTitle,
       projectContents,
       photos,
@@ -87,7 +87,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
           const project = JSON.parse(storedData);
           setProjectID(project.projectID);
           setProjectIcon(project.projectIcon);
-          setIcon(project.projectIcon || "plus");
+          setIcon(project.projectIcon || "add");
           setProjectTitle(project.projectTitle);
           setProjectContents(project.projectContents);
           setPhotos(project.photos || []);
@@ -114,7 +114,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
               <util.View style={styles.projectIconContainer}>
                 <util.Text style={styles.label}>Project Icon</util.Text>
                 {showIconPicker && (
-                  <IconPicker onIconPicked={changeIcon} currentIcon={icon} />)}
+                  <comp.IconPicker onIconPicked={changeIcon} currentIcon={icon} />)}
                 {projectIcon && (
                   <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
                     <util.Text style={styles.buttonText}>Remove</util.Text>
@@ -133,7 +133,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
               <util.View style={styles.photoPicker}>
                 <util.Text style={styles.label}>Add Photo</util.Text>
                 <util.Pressable onPress={addPhoto}>
-                  <util.Entypo name={"plus"} size={60} color={Colors.primary} />
+                  <util.MaterialIcons name={"add"} size={60} color={Colors.primary} />
                 </util.Pressable>
               </util.View>
               {photos.length > 0 && (

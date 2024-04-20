@@ -1,27 +1,27 @@
-import { Colors, Fonts, styles } from '../constants/index';
+import { Colors, Fonts, styles, icons } from '../constants/index';
 import * as util from '../index'
+import { IconRenderer } from '../components/layout/IconRender';
 
 export const ProjectIdeasScreen = () => {
   const navigation = util.useNavigation();
   const [ideas, setIdeas] = util.useState([]);
   const { width, height } = util.useWindowDimensions();
   const fetchIdeas = async () => {
-    let storedData = await util.AsyncStorage.getItem('@ideaIDs');
-    let ideaIDs = [];
-    if (storedData !== null) {
-      ideaIDs = JSON.parse(storedData);
-    }
-
-    const ideas = [];
-    for (let id of ideaIDs) {
-      const projectData = await util.AsyncStorage.getItem(`@idea_${id}`);
-      if (projectData !== null) {
-        const idea = JSON.parse(projectData);
-        ideas.push(idea);
+    const keys = await util.AsyncStorage.getAllKeys();
+    const ideaKeys = keys.filter(key => key.startsWith('@idea_'));
+    const ideaData = await util.AsyncStorage.multiGet(ideaKeys);
+    const ideas = ideaData.map(item => JSON.parse(item[1]));
+    ideas.sort((a, b) => {
+      const dateA = new Date(a.createdDate);
+      const dateB = new Date(b.createdDate);
+      if (dateA.getTime() !== dateB.getTime()) {
+        return dateB.getTime() - dateA.getTime();
       }
-    }
 
-    ideas.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
+      const editDateA = new Date(a.lastEditedDate);
+      const editDateB = new Date(b.lastEditedDate);
+      return editDateB.getTime() - editDateA.getTime();
+    });
 
     setIdeas(ideas);
   };
@@ -97,18 +97,18 @@ export const ProjectIdeasScreen = () => {
             style={styles.projectCard}
           >
             <util.View style={styles.projectHeader}>
-              <util.Entypo name={idea.ideaIcon} size={height / 15} color={Colors.primaryVariant} padding={5} />
+              <IconRenderer iconName={idea.ideaIcon.name} iconLibrary={idea.ideaIcon.library} size={height / 15} color={Colors.primaryVariant} padding={5} />
               <util.Text style={styles.projectTitle}>{idea.ideaTitle}</util.Text>
             </util.View>
 
             <util.View style={styles.buttonRow}>
-              <util.Pressable style={styles.greenButton} onPress={() => handleMakeProject(idea.ideaID)}>
+              <util.Pressable style={[styles.greenButton, styles.ideaButton]} onPress={() => handleMakeProject(idea.ideaID)}>
                 <util.Text style={styles.buttonText}>Make Project</util.Text>
               </util.Pressable>
-              <util.Pressable style={styles.redButton} onPress={() => handleDelete(idea.ideaID)}>
+              <util.Pressable style={[styles.redButton, styles.ideaButton]} onPress={() => handleDelete(idea.ideaID)}>
                 <util.Text style={styles.buttonText}>Delete</util.Text>
               </util.Pressable>
-              <util.Pressable style={styles.blueButton} onPress={() => handleEdit(idea.ideaID)}>
+              <util.Pressable style={[styles.blueButton, styles.ideaButton]} onPress={() => handleEdit(idea.ideaID)}>
                 <util.Text style={styles.buttonText}>Edit</util.Text>
               </util.Pressable>
             </util.View>

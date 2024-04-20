@@ -14,18 +14,36 @@ function HomeHeaderTitle({ children }) {
 }
 export const BottomTabNavigator = () => {
   const { width, height } = util.useWindowDimensions();
+  const getIconSize = (focused) => focused ? 60 : 50;
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarShowLabel: false,
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
+          let iconName;
+          let IconComponent;
+
           if (route.name === 'Home') {
-            return <util.MaterialIcons name="home" size={50} color={color} />;
+            iconName = focused ? "home-filled" : "home";
+            IconComponent = util.MaterialIcons;
           } else if (route.name === 'Ideas') {
-            return <util.MaterialCommunityIcons name="lightbulb-outline" size={50} color={color} />;
+            iconName = focused ? "lightbulb-on" : "lightbulb-outline";
+            IconComponent = util.MaterialCommunityIcons;
           } else if (route.name === 'Projects') {
-            return <util.Entypo name="tools" size={50} color={color} />;
+            iconName = focused ? "toolbox-outline" : "toolbox";
+            IconComponent = util.MaterialCommunityIcons;
           }
+
+          return (
+            <IconComponent
+              name={iconName}
+              size={getIconSize(focused)}
+              color={focused ? Colors.primaryText : color}
+              style={{
+                transform: [{ scale: focused ? 1.2 : 1 }]
+              }}
+            />
+          );
         },
         tabBarActiveBackgroundColor: Colors.primary,
         tabBarActiveTintColor: Colors.primaryText,
@@ -34,6 +52,18 @@ export const BottomTabNavigator = () => {
         tabBarStyle: {
           backgroundColor: Colors.primary,
           height: height / 12,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 10 },
+          shadowOpacity: 0.3,
+          shadowRadius: 20,
+          elevation: 20,
+          borderRadius: 15,
+          marginHorizontal: 5,
+          position: 'absolute',
+          bottom: 10,
+          left: 10,
+          right: 10,
+          overflow: 'hidden',
         },
       })}
     >
@@ -49,7 +79,7 @@ export const BottomTabNavigator = () => {
       }} />
       <Tab.Screen name="Projects" component={StartedProjectsScreen} options={{
         headerStyle: { backgroundColor: Colors.primary, height: height / 7 },
-        headerTitleStyle: { fontFamily: 'etnaSS', color: Colors.primaryText, fontSize: 50, },
+        headerTitleStyle: { fontFamily: 'etnaSS', color: Colors.primaryText, fontSize: 50 },
         headerTitleAlign: 'center',
       }} />
     </Tab.Navigator>

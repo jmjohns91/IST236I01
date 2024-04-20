@@ -386,4 +386,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 3,
   },
+  ideaButton: {
+    flex: 1,
+    margin: 5,
+    padding: 5,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

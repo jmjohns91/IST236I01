@@ -1,5 +1,6 @@
-import { Colors, Fonts, styles } from '../constants/index';
+import { Colors, Fonts, styles, icons } from '../constants/index';
 import * as util from '../index'
+import { IconRenderer } from '../components/layout/IconRender';
 
 export const StartedProjectsScreen = () => {
   const navigation = util.useNavigation();
@@ -12,7 +13,21 @@ export const StartedProjectsScreen = () => {
     const projectKeys = keys.filter(key => key.startsWith('@project_'));
     const projectData = await util.AsyncStorage.multiGet(projectKeys);
     const projects = projectData.map(item => JSON.parse(item[1]));
-    projects.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
+    projects.sort((a, b) => {
+      if (a.completed !== b.completed) {
+        return a.completed ? 1 : -1;
+      }
+      const dateA = new Date(a.createdDate);
+      const dateB = new Date(b.createdDate);
+      if (dateA.getTime() !== dateB.getTime()) {
+        return dateB.getTime() - dateA.getTime();
+      }
+
+      const editDateA = new Date(a.lastEditedDate);
+      const editDateB = new Date(b.lastEditedDate);
+      return editDateB.getTime() - editDateA.getTime();
+    });
+
     setProjects(projects);
   };
 
@@ -157,7 +172,7 @@ export const StartedProjectsScreen = () => {
             key={project.projectID}
             style={styles.projectCard}
           ><util.View style={styles.projectHeader}>
-              <util.Entypo name={project.projectIcon} size={height / 15} color={Colors.primaryVariant} padding={5} />
+              <IconRenderer iconName={project.projectIcon.name} iconLibrary={project.projectIcon.library} size={height / 15} color={Colors.primaryVariant} padding={5} />
               <util.Text style={styles.projectTitle}>{project.projectTitle}</util.Text></util.View>
             <util.Text style={styles.projectContents}>{project.projectContents}</util.Text>
             {project.photos.map((photoUri, photoIndex) => (

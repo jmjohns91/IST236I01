@@ -1,11 +1,11 @@
 import { Colors, Fonts, styles } from '../constants/index';
 import * as util from '../index'
-import { IconPicker } from '../components/modals/IconPicker';
+import * as comp from '../components/index';
 
 export const IdeaDetailsScreen = ({ route, navigation }) => {
   const isNewIdea = !route.params?.ideaID;
   const [ideaID, setIdeaID] = util.useState(() => isNewIdea ? util.uuidv4() : '');
-  const [icon, setIcon] = util.useState("plus");
+  const [icon, setIcon] = util.useState({ name: "add", library: "MaterialIcons" });
   const [ideaIcon, setIdeaIcon] = util.useState(null);
   const [ideaTitle, setIdeaTitle] = util.useState('');
   const [createdDate, setCreatedDate] = util.useState(() => new Date());
@@ -26,7 +26,7 @@ export const IdeaDetailsScreen = ({ route, navigation }) => {
   const saveIdea = async () => {
     const ideaData = {
       ideaID,
-      ideaIcon,
+      ideaIcon: { name: icon.name, library: icon.library },
       ideaTitle,
       createdDate,
       lastEditedDate: new Date(),
@@ -49,7 +49,7 @@ export const IdeaDetailsScreen = ({ route, navigation }) => {
           const project = JSON.parse(storedData);
           setIdeaID(project.ideaID);
           setIdeaIcon(project.ideaIcon);
-          setIcon(project.ideaIcon || "plus");
+          setIcon(project.ideaIcon || "add");
           setIdeaTitle(project.ideaTitle);
           setCreatedDate(new Date(project.createdDate));
           setLastEditedDate(new Date(project.lastEditedDate));
@@ -73,7 +73,7 @@ export const IdeaDetailsScreen = ({ route, navigation }) => {
               <util.View style={styles.projectIconContainer}>
                 <util.Text style={styles.label}>Idea Icon</util.Text>
                 {showIconPicker && (
-                  <IconPicker onIconPicked={changeIcon} currentIcon={icon} />)}
+                  <comp.IconPicker onIconPicked={changeIcon} currentIcon={icon} />)}
                 {ideaIcon && (
                   <util.Pressable style={[styles.redButton, styles.iconButton]} onPress={removeIcon}>
                     <util.Text style={styles.buttonText}>Remove</util.Text>

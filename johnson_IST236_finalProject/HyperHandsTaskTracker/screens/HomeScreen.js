@@ -1,7 +1,8 @@
 import * as util from '../index';
-import { Colors, Fonts, styles } from '../constants/index';
+import { Colors, Fonts, styles, icons } from '../constants/index';
 import { insertDummyData } from '../data/dummyData';
 import { clearAllData } from '../data/dummyData';
+import { IconRenderer } from '../components/layout/IconRender';
 export const HomeScreen = ({ navigation, route }) => {
   const [tasksCompletedPercentage, setTasksCompletedPercentage] = util.useState(0);
   const [openProjects, setOpenProjects] = util.useState(0);
@@ -79,13 +80,17 @@ export const HomeScreen = ({ navigation, route }) => {
 
           <util.View style={styles.row}>
             <util.TouchableOpacity style={styles.homeCard} onPress={handleAddNewProject}>
-              <util.MaterialIcons name="add-circle-outline" paddingTop={30} size={100} color={Colors.accentColor} />
+              <util.View style={{ paddingTop: 30 }}>
+                <IconRenderer iconName="add-circle-outline" iconLibrary="MaterialIcons" paddingTop={30} size={100} color={Colors.accentColor} />
+              </util.View>
               <util.View style={styles.greenButton} >
                 <util.Text style={styles.label}>Add New Project</util.Text>
               </util.View>
             </util.TouchableOpacity>
             <util.TouchableOpacity style={styles.homeCard} onPress={handleAddNewIdea}>
-              <util.MaterialIcons name="add-circle-outline" paddingTop={30} size={100} color={Colors.primary} />
+              <util.View style={{ paddingTop: 30 }}>
+                <IconRenderer iconName="add-circle-outline" iconLibrary="MaterialIcons" paddingTop={30} size={100} color={Colors.primary} />
+              </util.View>
               <util.View style={styles.blueButton}>
                 <util.Text style={styles.label}>Add New Idea</util.Text>
               </util.View>
@@ -97,7 +102,9 @@ export const HomeScreen = ({ navigation, route }) => {
           {oldestOpenProject && (
             <util.TouchableOpacity style={styles.homeCard} onPress={() => handleOldestOpenProject(oldestOpenProject.projectID)}>
               <util.View style={styles.oldestTopContainer}>
-                <util.View style={styles.iconContainerOOP}><util.Entypo name={oldestOpenProject.projectIcon} size={width / 6} color={Colors.primary} /></util.View>
+                <util.View style={styles.iconContainerOOP}>
+                  <IconRenderer iconName={oldestOpenProject.projectIcon.name} iconLibrary={oldestOpenProject.projectIcon.library} size={width / 6} color={Colors.primary} />
+                </util.View>
                 <util.Text style={styles.oldestProjectTitle}>{oldestOpenProject.projectTitle}</util.Text>
               </util.View>
               <util.View style={styles.daysSinceProgressContainer}>

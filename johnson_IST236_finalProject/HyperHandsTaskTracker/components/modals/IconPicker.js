@@ -1,29 +1,34 @@
-import { Colors, Fonts, styles } from '../../constants/index';
+import { Colors, Fonts, styles, icons } from '../../constants/index';
 import * as util from '../../index';
-
-const allIcons = Object.keys(util.Entypo.getRawGlyphMap());
+import { IconRenderer } from '../layout/IconRender';
 
 export const IconPicker = ({ onIconPicked, currentIcon }) => {
   const [modalVisible, setModalVisible] = util.useState(false);
-  const displayIcon = currentIcon || "plus";
-  const handleIconPress = (iconName) => {
-    onIconPicked(iconName);
-    setModalVisible(false);
-  };
+  const [selectedIcon, setSelectedIcon] = util.useState(() => currentIcon || { name: "add", library: "MaterialIcons" });
+  util.useEffect(() => {
+    if (currentIcon) {
+      setSelectedIcon(currentIcon);
+    }
+  }, [currentIcon]);
+
 
   return (
     <util.View>
       <util.TouchableOpacity onPress={() => setModalVisible(true)}>
-        <util.Entypo name={displayIcon} size={60} color={Colors.primary} />
+        <IconRenderer iconName={selectedIcon.name || "add"} iconLibrary={selectedIcon.library || "MaterialIcons"} size={60} color={Colors.primary} />
       </util.TouchableOpacity>
 
       <util.Modal visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
         <util.FlatList
-          data={allIcons}
-          keyExtractor={(item) => item}
+          data={icons}
+          keyExtractor={(item) => `${item.library}-${item.name}`}
           renderItem={({ item }) => (
-            <util.TouchableOpacity style={styles.iconPickerContainer} onPress={() => handleIconPress(item)}>
-              <util.Entypo name={item} size={50} color={Colors.primary} />
+            <util.TouchableOpacity style={styles.iconPickerContainer} onPress={() => {
+              onIconPicked(item);
+              setSelectedIcon(item);
+              setModalVisible(false);
+            }}>
+              <IconRenderer iconName={item.name} iconLibrary={item.library} size={50} color={Colors.primary} />
             </util.TouchableOpacity>
           )}
           numColumns={7}
