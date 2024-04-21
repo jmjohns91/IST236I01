@@ -24,6 +24,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
 
   const removeIcon = () => {
     setProjectIcon(null);
+    setIcon({ name: "add", library: "MaterialIcons" });
   };
 
   const addPhoto = async () => {
@@ -47,7 +48,7 @@ export const ProjectDetailsScreen = ({ route, navigation }) => {
   const saveProject = async () => {
     const projectData = {
       projectID,
-      projectIcon: { name: icon.name, library: icon.library },
+      projectIcon: projectIcon ? { name: icon.name, library: icon.library } : null,
       projectTitle,
       projectContents,
       photos,

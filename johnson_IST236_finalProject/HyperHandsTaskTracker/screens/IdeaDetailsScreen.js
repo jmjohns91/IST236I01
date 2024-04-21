@@ -26,7 +26,7 @@ export const IdeaDetailsScreen = ({ route, navigation }) => {
   const saveIdea = async () => {
     const ideaData = {
       ideaID,
-      ideaIcon: { name: icon.name, library: icon.library },
+      ideaIcon: ideaIcon ? { name: icon.name, library: icon.library } : null,
       ideaTitle,
       createdDate,
       lastEditedDate: new Date(),

@@ -148,13 +148,16 @@ export const StartedProjectsScreen = () => {
             let updatedProjects = projects.map(project => {
               if (project.projectID === projectID) {
                 let newPhotos = [...project.photos];
-                newPhotos.splice(photoIndex, 1);  // Remove the photo by index
+                newPhotos.splice(photoIndex, 1);
                 return { ...project, photos: newPhotos };
               }
               return project;
             });
-            await util.AsyncStorage.setItem('projects', JSON.stringify(updatedProjects)); // Save to AsyncStorage
-            setProjects(updatedProjects);  // Update state
+            setProjects(updatedProjects);
+            const projectToUpdate = updatedProjects.find(p => p.projectID === projectID);
+            if (projectToUpdate) {
+              await util.AsyncStorage.setItem(`@project_${projectID}`, JSON.stringify(projectToUpdate));
+            }
           }
         }
       ]
@@ -172,7 +175,7 @@ export const StartedProjectsScreen = () => {
             key={project.projectID}
             style={styles.projectCard}
           ><util.View style={styles.projectHeader}>
-              <IconRenderer iconName={project.projectIcon.name} iconLibrary={project.projectIcon.library} size={height / 15} color={Colors.primaryVariant} padding={5} />
+              <IconRenderer iconName={project.projectIcon ? project.projectIcon.name : ''} iconLibrary={project.projectIcon ? project.projectIcon.library : ''} size={height / 15} color={Colors.primaryVariant} padding={5} />
               <util.Text style={styles.projectTitle}>{project.projectTitle}</util.Text></util.View>
             <util.Text style={styles.projectContents}>{project.projectContents}</util.Text>
             {project.photos.map((photoUri, photoIndex) => (

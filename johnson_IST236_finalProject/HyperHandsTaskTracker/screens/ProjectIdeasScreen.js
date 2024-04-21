@@ -97,7 +97,7 @@ export const ProjectIdeasScreen = () => {
             style={styles.projectCard}
           >
             <util.View style={styles.projectHeader}>
-              <IconRenderer iconName={idea.ideaIcon.name} iconLibrary={idea.ideaIcon.library} size={height / 15} color={Colors.primaryVariant} padding={5} />
+              <IconRenderer iconName={idea.ideaIcon ? idea.ideaIcon.name : ''} iconLibrary={idea.ideaIcon ? idea.ideaIcon.library : ''} size={height / 15} color={Colors.primaryVariant} padding={5} />
               <util.Text style={styles.projectTitle}>{idea.ideaTitle}</util.Text>
             </util.View>
 

@@ -299,4 +299,5 @@ export const icons = [
   { name: "lightbulb-outline", library: "MaterialCommunityIcons" },
   { name: "home", library: "MaterialIcons" },
   { name: "tools", library: "Entypo" },
+  { name: "", library: "" },
 ];
